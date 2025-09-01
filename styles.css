@@ -188,7 +188,6 @@ body, html {
     font-size: 28px;
     color: white;
     cursor: pointer;
-    margin-left: auto;
     padding: 10px;
     display: none; /* visible que sur mobile */
 }
