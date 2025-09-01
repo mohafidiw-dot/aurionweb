@@ -58,3 +58,19 @@ document.getElementById("logout-button").addEventListener("click", function() {
     alert("Vous avez été déconnecté.");
     location.reload();
 });
+// Sélection des éléments
+const menuToggle = document.getElementById("menu-toggle");
+const sidebar = document.querySelector(".sidebar");
+const menuLinks = document.querySelectorAll(".menu a");
+
+// Toggle menu (ouverture/fermeture)
+menuToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+});
+
+// Quand on clique sur un lien → fermer le menu
+menuLinks.forEach(link => {
+    link.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+    });
+});
