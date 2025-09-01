@@ -189,7 +189,7 @@ body, html {
     color: white;
     cursor: pointer;
     padding: 10px;
-    display: none; /* visible que sur mobile */
+    display: block; /* visible que sur mobile */
 }
 
 /* Sidebar cachée par défaut */
