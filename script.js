@@ -40,6 +40,12 @@ document.getElementById("absence-button").addEventListener("click", function() {
     document.getElementById("notes-annee-en-cours").style.display = "none";
     document.getElementById("absence-section").style.display = "block";
 });
+document.getElementById("edt-button").addEventListener("click", function() {
+    document.getElementById("mon-compte-section").style.display = "none";
+    document.getElementById("notes-annee-en-cours").style.display = "none";
+    document.getElementById("absence-section").style.display = "none";
+    document.getElementById("edt-section").style.display = "block";
+});
 
 document.getElementById("resultats-button").addEventListener("click", function() {
     document.getElementById("mon-compte-section").style.display = "none";
