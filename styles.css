@@ -183,7 +183,46 @@ body, html {
     height: 100%;
     border: none;
 }
+/* Bouton menu hamburger */
+.menu-toggle {
+    font-size: 28px;
+    color: white;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 10px;
+    display: none; /* visible que sur mobile */
+}
 
+/* Sidebar cachée par défaut */
+.sidebar {
+    width: 240px;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    top: 80px;
+    bottom: 0;
+    left: -240px; /* cachée */
+    overflow-y: auto;
+    padding-top: 20px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.active {
+    left: 0; /* affichée */
+}
+
+/* Quand le menu est ouvert, le contenu ne se décale pas */
+.content {
+    margin-left: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* bouton visible */
+    }
+}
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
     .header {
