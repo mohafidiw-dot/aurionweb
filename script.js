@@ -74,20 +74,7 @@ menuLinks.forEach(link => {
         sidebar.classList.remove("active");
     });
 });
-document.querySelector(".menu li a[href='#']").addEventListener("click", function(e) {
-    if (e.target.textContent.trim() === "Mes bulletins") {
-        e.preventDefault();
 
-        // Cacher toutes les sections
-        document.getElementById("mon-compte-section").style.display = "none";
-        document.getElementById("notes-annee-en-cours").style.display = "none";
-        document.getElementById("absence-section").style.display = "none";
-        document.getElementById("edt-section").style.display = "none";
-
-        // Afficher la section Bulletins
-        document.getElementById("bulletins-section").style.display = "block";
-    }
-});
 document.getElementById("bulletins-button").addEventListener("click", function(e) {
     e.preventDefault();
 
