@@ -1,125 +1,368 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Emploi du temps</title>
+  <meta charset="utf-8" />
+  <title>Emploi du temps — style Aurion</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f9f9f9;
+    :root{
+      --bg:#f1f3f4;
+      --card:#ffffff;
+      --accent:#f5821f;
+      --slot:#4caf50;
+      --text:#222;
+      --muted:#9aa0a6;
+      --gutter:14px;
     }
-    header {
-      background: #f5821f;
-      color: white;
-      padding: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
-    table {
-      width: 95%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      background: white;
+
+    header.appbar{
+      background:var(--accent);
+      color:white;
+      padding:14px 20px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      box-shadow:0 2px 0 rgba(0,0,0,0.04);
     }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 16px;
-      min-width: 130px;
-      min-height: 60px;
+    header.appbar h1{
+      font-size:16px;
+      margin:0;
+      letter-spacing:0.2px;
     }
-    th {
-      background: #f5821f;
-      color: white;
-      font-size: 14px;
+
+    .board-wrap{
+      max-width:1200px;
+      margin:22px auto;
+      padding:18px;
+      background:var(--card);
+      border-radius:8px;
+      box-shadow:0 6px 18px rgba(8,24,40,0.06);
+      border:1px solid rgba(0,0,0,0.03);
     }
-    .cours {
-      background: #4caf50;
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      padding: 8px;
-      display: inline-block;
-      width: 100%;
+
+    /* top controls row (date + week) */
+    .controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
     }
-    .integration {
-      background: #2196f3;
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      padding: 8px;
-      display: inline-block;
-      width: 100%;
+    .controls .title{
+      font-weight:600;
+      color:var(--text);
     }
-    .gestion {
-      background: #9c27b0;
-      color: white;
-      font-weight: bold;
-      border-radius: 6px;
-      padding: 8px;
-      display: inline-block;
-      width: 100%;
+    .controls .meta{
+      color:var(--muted);
+      font-size:14px;
     }
+
+    /* grid layout: left hours column + 5 day columns */
+    .schedule{
+      display:grid;
+      grid-template-columns: 80px repeat(5, 1fr);
+      gap:12px;
+      align-items:start;
+    }
+
+    /* hour column: grid rows for each hour */
+    .hours{
+      display:grid;
+      grid-template-rows: repeat(11, 64px); /* 08-19 -> 11 slots; each 64px tall */
+      gap:0;
+      padding-right:6px;
+    }
+    .hours .hour{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      padding-right:10px;
+      color:var(--muted);
+      font-size:13px;
+      border-right:1px solid rgba(0,0,0,0.02);
+    }
+
+    /* days columns area */
+    .days{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:12px;
+    }
+
+    .day{
+      background:transparent;
+      border-radius:6px;
+      min-height: calc(11 * 64px);
+      display:grid;
+      grid-template-rows: 40px repeat(11, 64px);
+      /* first row reserved for header */
+      overflow:visible;
+    }
+
+    .day > .day-head{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:transparent;
+      font-weight:600;
+      color:#333;
+      font-size:14px;
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      padding:8px 6px;
+    }
+
+    /* empty slot visual separators (subtle lines) */
+    .day .slot{
+      border-bottom:1px dashed rgba(0,0,0,0.03);
+      position:relative;
+    }
+
+    /* appointment style (course block) */
+    .appt{
+      position:relative;
+      margin:6px;
+      background:var(--slot);
+      color:white;
+      border-radius:8px;
+      padding:10px;
+      font-weight:700;
+      box-shadow:0 6px 12px rgba(76,175,80,0.12);
+      line-height:1.08;
+      font-size:13px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .appt small{
+      font-weight:600;
+      font-size:12px;
+      opacity:0.95;
+      margin-top:6px;
+      font-weight:600;
+    }
+
+    /* different look for Gestion blocks */
+    .gestion{
+      background:#9c27b0;
+      box-shadow:0 6px 12px rgba(156,39,176,0.12);
+    }
+
+    /* responsive */
+    @media (max-width:1000px){
+      .schedule{ grid-template-columns: 60px repeat(5, 1fr); }
+      .hours{ grid-template-rows: repeat(11, 56px); }
+      .day{ grid-template-rows: 36px repeat(11, 56px); }
+    }
+    @media (max-width:700px){
+      .board-wrap{ padding:10px; margin:10px; }
+      .schedule{ grid-template-columns: 56px repeat(5, 1fr); gap:6px; }
+    }
+
+    /* helper: place appt using CSS grid-row values on the day container */
+    /* We'll create wrappers that span several row-lines in the day grid */
+    .place{ grid-row: 2 / span 1; } /* default; overridden inline */
   </style>
 </head>
 <body>
-  <header>ensIIE - Emploi du temps</header>
+  <header class="appbar">
+    <h1>ensIIE — Emploi du temps (W41)</h1>
+  </header>
 
-  <table>
-    <tr>
-      <th>Heure</th>
-      <th>Lundi</th>
-      <th>Mardi</th>
-      <th>Mercredi</th>
-      <th>Jeudi</th>
-      <th>Vendredi</th>
-    </tr>
+  <main class="board-wrap">
+    <div class="controls">
+      <div class="title">Semaine : 6 — 12 Octobre 2025</div>
+      <div class="meta">Vue statique — style Aurion</div>
+    </div>
 
-    <tr>
-      <td>09h-11h</td>
-      <td class="cours">Conférences</td>
-      <td class="cours">Processus stochastique</td>
-      <td rowspan="2" class="cours">Recherche opérationnelle</td>
-      <td></td>
-      <td class="cours">Programmation avancée</td>
-    </tr>
+    <div class="schedule">
+      <!-- hours column -->
+      <div class="hours" aria-hidden="true">
+        <div class="hour">08</div>
+        <div class="hour">09</div>
+        <div class="hour">10</div>
+        <div class="hour">11</div>
+        <div class="hour">12</div>
+        <div class="hour">13</div>
+        <div class="hour">14</div>
+        <div class="hour">15</div>
+        <div class="hour">16</div>
+        <div class="hour">17</div>
+        <div class="hour">18</div>
+      </div>
 
-    <tr>
-      <td>11h-13h</td>
-      <td class="cours">Analyse de données</td>
-      <td class="cours">Processus stochastique</td>
-      <td class="cours">Programmation impérative</td>
-      <td></td>
-    </tr>
+      <!-- days columns -->
+      <div class="days">
+        <!-- Lundi -->
+        <div class="day" aria-label="Lundi">
+          <div class="day-head">Lun 06/10</div>
+          <!-- rows 2..12 represent 09..18 -->
+          <div class="slot"></div> <!-- 08-09 -->
+          <div class="slot"></div> <!-- 09-10 -->
+          <div class="slot"></div> <!-- 10-11 -->
+          <div class="slot"></div> <!-- 11-12 -->
+          <div class="slot"></div> <!-- 12-13 -->
+          <div class="slot"></div> <!-- 13-14 -->
+          <div class="slot"></div> <!-- 14-15 -->
+          <div class="slot"></div> <!-- 15-16 -->
+          <div class="slot"></div> <!-- 16-17 -->
+          <div class="slot"></div> <!-- 17-18 -->
+          <div class="slot"></div> <!-- 18-19 -->
 
-    <tr>
-      <td>13h-14h</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+          <!-- Méthodes de régression (09:00 - 12:00) -->
+          <div class="appt" style="grid-row: 3 / 6; position: absolute; left: 6px; right: 6px; top: calc(64px * 1 + 40px);">
+            Méthodes de régression réguliarisée<br>
+            <small>FISE_CM · MOUGEOT · Amphi 102</small>
+          </div>
 
-    <tr>
-      <td>14h-16h</td>
-      <td class="cours">Analyse de données</td>
-      <td></td>
-      <td class="cours">Méthodes de régression</td>
-      <td class="cours">Recherche opérationnelle (cours)</td>
-      <td rowspan="2" class="gestion">Gestion, Économie & Droit</td>
-    </tr>
+          <!-- Analyse de données (14:00 - 17:00) -->
+          <div class="appt" style="grid-row: 8 / 11; position: absolute; left: 6px; right: 6px; top: calc(64px * 6 + 40px);">
+            Analyse de données — FISE_CM / TP<br>
+            <small>Amphi Ivan AUGÉ / S.227</small>
+          </div>
+        </div>
 
-    <tr>
-      <td>16h-18h</td>
-      <td class="cours">Analyse de données</td>
-      <td></td>
-      <td></td>
-      <td class="cours">Recherche opérationnelle (TD)</td>
-    </tr>
-  </table>
+        <!-- Mardi -->
+        <div class="day" aria-label="Mardi">
+          <div class="day-head">Mar 07/10</div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+
+          <!-- LV1 - Anglais (11:00 - 12:00) -->
+          <div class="appt" style="grid-row: 5 / 6; position: absolute; left: calc(100% / 5 + 6px); right: 6px; top: calc(64px * 3 + 40px);">
+            LV1 — Anglais (Cours/TD)<br>
+            <small>Bayly · S.122</small>
+          </div>
+
+          <!-- Processus stochastique (14:00 - 17:00) -->
+          <div class="appt" style="grid-row: 8 / 11; position: absolute; left: calc(100% / 5 + 6px); right: 6px; top: calc(64px * 6 + 40px);">
+            Processus stochastique — FISE_CM / TP<br>
+            <small>SAGNA · Amphi Ivan AUGÉ</small>
+          </div>
+        </div>
+
+        <!-- Mercredi -->
+        <div class="day" aria-label="Mercredi">
+          <div class="day-head">Mer 08/10</div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+
+          <!-- Recherche opérationnelle (09:00 - 12:00) -->
+          <div class="appt" style="grid-row: 3 / 6; position: absolute; left: calc((100% / 5) * 2 + 6px); right: 6px; top: calc(64px * 1 + 40px);">
+            Recherche opérationnelle — FISE_CM<br>
+            <small>WATEL · Amphi Ivan AUGÉ</small>
+          </div>
+
+          <!-- Recherche opérationnelle (11:00 - 13:00, TD) -->
+          <div class="appt" style="grid-row: 5 / 7; position: absolute; left: calc((100% / 5) * 2 + 6px); right: 6px; top: calc(64px * 3 + 40px);">
+            Recherche opérationnelle — FISE_TD<br>
+            <small>WATEL · Amphi Ivan AUGÉ</small>
+          </div>
+
+          <!-- LV2 (14:00 - 15:00) -->
+          <div class="appt" style="grid-row: 8 / 9; position: absolute; left: calc((100% / 5) * 2 + 6px); right: 6px; top: calc(64px * 6 + 40px);">
+            LV2 — Langues vivantes (Cours/TD)<br>
+            <small>SUAREZ-ROJAS · S.139</small>
+          </div>
+
+          <!-- Challenge (18:00 - 19:00) -->
+          <div class="appt" style="grid-row: 12 / 13; position: absolute; left: calc((100% / 5) * 2 + 6px); right: 6px; top: calc(64px * 10 + 40px);">
+            Challenge entreprendre — Soirée Matching<br>
+            <small>Sciences de l'ingénieur</small>
+          </div>
+        </div>
+
+        <!-- Jeudi -->
+        <div class="day" aria-label="Jeudi">
+          <div class="day-head">Jeu 09/10</div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+
+          <!-- Recherche opérationnelle (14:00 - 16:00 cours / 16:00-18:00 TD) -->
+          <div class="appt" style="grid-row: 8 / 10; position: absolute; left: calc((100% / 5) * 3 + 6px); right: 6px; top: calc(64px * 6 + 40px);">
+            Recherche opérationnelle (cours)<br>
+            <small>Amphi / FISE</small>
+          </div>
+
+          <div class="appt" style="grid-row: 10 / 12; position: absolute; left: calc((100% / 5) * 3 + 6px); right: 6px; top: calc(64px * 8 + 40px);">
+            Recherche opérationnelle (TD)<br>
+            <small>Salle TD</small>
+          </div>
+        </div>
+
+        <!-- Vendredi -->
+        <div class="day" aria-label="Vendredi">
+          <div class="day-head">Ven 10/10</div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+          <div class="slot"></div>
+
+          <!-- Programmation avancée et projet (09:00 - 12:00) -->
+          <div class="appt" style="grid-row: 3 / 6; position: absolute; left: calc((100% / 5) * 4 + 6px); right: 6px; top: calc(64px * 1 + 40px);">
+            Programmation avancée et projet — FISE_CM<br>
+            <small>TORRI · Amphi Ivan AUGÉ</small>
+          </div>
+
+          <!-- Programmation avancée (11:00 - 13:00) duplicate (apparent on la capture) -->
+          <div class="appt" style="grid-row: 5 / 7; position: absolute; left: calc((100% / 5) * 4 + 6px); right: 6px; top: calc(64px * 3 + 40px);">
+            Programmation avancée — Projet / CM<br>
+            <small>Amphi Ivan AUGÉ</small>
+          </div>
+
+          <!-- Droit civil et informatique (14:00 - 17:00) -->
+          <div class="appt gestion" style="grid-row: 8 / 11; position: absolute; left: calc((100% / 5) * 4 + 6px); right: 6px; top: calc(64px * 6 + 40px);">
+            Droit civil et informatique — Gestion, économie, droit<br>
+            <small>PILLIAS-PERRON · Amphi 102</small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
 </body>
 </html>
+
