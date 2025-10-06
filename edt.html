@@ -12,54 +12,62 @@
     header {
       background: #f5821f;
       color: white;
-      padding: 20px;
-      font-size: 20px;
+      padding: 15px;
+      font-size: 18px;
       font-weight: bold;
       text-align: center;
     }
     table {
       width: 95%;
-      margin: 30px auto;
+      margin: 20px auto;
       border-collapse: collapse;
       text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       background: white;
-      font-size: 15px;
     }
     th, td {
       border: 1px solid #ddd;
-      padding: 20px; /* plus grand padding */
+      padding: 16px;
       min-width: 130px;
-      min-height: 60px; /* hauteur minimum pour agrandir les cases */
+      min-height: 60px;
     }
     th {
       background: #f5821f;
       color: white;
-      font-size: 16px;
-    }
-    .cours, .integration, .gestion {
-      font-weight: bold;
-      border-radius: 6px;
-      padding: 10px;
-      display: inline-block;
-      width: 100%;
+      font-size: 14px;
     }
     .cours {
       background: #4caf50;
       color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      padding: 8px;
+      display: inline-block;
+      width: 100%;
     }
     .integration {
       background: #2196f3;
       color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      padding: 8px;
+      display: inline-block;
+      width: 100%;
     }
     .gestion {
       background: #9c27b0;
       color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      padding: 8px;
+      display: inline-block;
+      width: 100%;
     }
   </style>
 </head>
 <body>
   <header>ensIIE - Emploi du temps</header>
+
   <table>
     <tr>
       <th>Heure</th>
@@ -69,6 +77,7 @@
       <th>Jeudi</th>
       <th>Vendredi</th>
     </tr>
+
     <tr>
       <td>09h-11h</td>
       <td class="cours">Conférences</td>
@@ -77,6 +86,7 @@
       <td></td>
       <td class="cours">Programmation avancée</td>
     </tr>
+
     <tr>
       <td>11h-13h</td>
       <td class="cours">Analyse de données</td>
@@ -84,6 +94,7 @@
       <td class="cours">Programmation impérative</td>
       <td></td>
     </tr>
+
     <tr>
       <td>13h-14h</td>
       <td></td>
@@ -92,6 +103,7 @@
       <td></td>
       <td></td>
     </tr>
+
     <tr>
       <td>14h-16h</td>
       <td class="cours">Analyse de données</td>
@@ -100,6 +112,7 @@
       <td class="cours">Recherche opérationnelle (cours)</td>
       <td rowspan="2" class="gestion">Gestion, Économie & Droit</td>
     </tr>
+
     <tr>
       <td>16h-18h</td>
       <td class="cours">Analyse de données</td>
@@ -110,4 +123,3 @@
   </table>
 </body>
 </html>
-
